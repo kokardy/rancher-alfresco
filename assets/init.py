@@ -219,7 +219,8 @@ class ServiceRun():
       global ALFRESCO_PATH
 
       if len(os.listdir(ALFRESCO_PATH + '/alf_data')) < 3:
-          os.system('mv ' + ALFRESCO_PATH + '/alf_data_org/* ' + ALFRESCO_PATH + '/alf_data/')
+          # Replace mv per rsync to avoid bugs with autFS
+          os.system('rsync -a --remove-source-files ' + ALFRESCO_PATH + '/alf_data_org/. ' + ALFRESCO_PATH + '/alf_data')
           os.system('chown -R alfresco:alfresco ' + ALFRESCO_PATH + '/alf_data')
 
 

@@ -3,7 +3,7 @@ set -e
 
 # Add extra library
 apt-get update
-apt-get install -y --no-install-recommends sudo curl supervisor fontconfig libice6 libsm6 libxt6 libxrender1 libfontconfig1 libxinerama1 libglu1-mesa  libcups2 ghostscript imagemagick xvfb xfonts-base
+apt-get install -y --no-install-recommends sudo curl rsync supervisor fontconfig libice6 libsm6 libxt6 libxrender1 libfontconfig1 libxinerama1 libglu1-mesa  libcups2 ghostscript imagemagick xvfb xfonts-base
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 
