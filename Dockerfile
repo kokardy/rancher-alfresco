@@ -1,6 +1,6 @@
 # webcenter/rancher-alfresco
 
-FROM quay.io/webcenter/rancher-base-image:latest
+FROM ubuntu:17.04
 MAINTAINER Sebastien LANGOUREAUX (linuxworkgroup@hotmail.com)
 
 #Alfresco version
