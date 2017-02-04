@@ -9,6 +9,9 @@ import time
 __author__ = 'Sebastien LANGOUREAUX'
 
 ALFRESCO_PATH = '/opt/alfresco'
+GLOBAL_PROP = '/tomcat/shared/classes/alfresco-global.properties'
+LDAP_PROP = '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties'
+
 
 class ServiceRun():
 
@@ -50,11 +53,11 @@ class ServiceRun():
       else:
           db_driver = "org.postgresql.Driver"
 
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'db.driver\s*=.*', 'db.driver=' + db_driver)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'db.username\s*=.*', 'db.username=' + db_user)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'db.password\s*=.*', 'db.password=' + db_password)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'db.name\s*=.*', 'db.name=' + db_name)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'db.url\s*=.*', 'db.url=jdbc:' + db_type + '://' + db_host + ':' + db_port + '/' + db_name + db_conn_params)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'db.driver\s*=.*', 'db.driver=' + db_driver)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'db.username\s*=.*', 'db.username=' + db_user)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'db.password\s*=.*', 'db.password=' + db_password)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'db.name\s*=.*', 'db.name=' + db_name)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'db.url\s*=.*', 'db.url=jdbc:' + db_type + '://' + db_host + ':' + db_port + '/' + db_name + db_conn_params)
 
 
   def set_alfresco_context(self, host, port, protocol):
@@ -69,9 +72,9 @@ class ServiceRun():
       if protocol is None or protocol == "":
           raise KeyError("You must provide protocol")
 
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'alfresco.host\s*=.*', 'alfresco.host=' + host)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'alfresco.port\s*=.*', 'alfresco.port=' + port)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'alfresco.protocol\s*=.*', 'alfresco.protocol=' + protocol)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'alfresco.host\s*=.*', 'alfresco.host=' + host)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'alfresco.port\s*=.*', 'alfresco.port=' + port)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'alfresco.protocol\s*=.*', 'alfresco.protocol=' + protocol)
 
 
 
@@ -87,9 +90,9 @@ class ServiceRun():
       if protocol is None or protocol == "":
           raise KeyError("You must provide protocol")
 
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'share.host\s*=.*', 'share.host=' + host)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'share.port\s*=.*', 'share.port=' + port)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'share.protocol\s*=.*', 'share.protocol=' + protocol)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'share.host\s*=.*', 'share.host=' + host)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'share.port\s*=.*', 'share.port=' + port)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'share.protocol\s*=.*', 'share.protocol=' + protocol)
 
   def set_ftp(self, enable, port):
       global ALFRESCO_PATH
@@ -100,8 +103,8 @@ class ServiceRun():
       if enable not in ["true", "false"]:
           raise KeyError("Enable must be true or false")
 
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'ftp.enabled\s*=.*', 'ftp.enabled=' + enable)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'ftp.port\s*=.*', 'ftp.port=' + port)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'ftp.enabled\s*=.*', 'ftp.enabled=' + enable)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'ftp.port\s*=.*', 'ftp.port=' + port)
 
   def set_core(self, environment):
       global ALFRESCO_PATH
@@ -109,8 +112,8 @@ class ServiceRun():
       if environment not in ["UNKNOWN", "TEST", "BACKUP", "PRODUCTION"]:
           raise KeyError("Environment must be UNKNOWN, TEST, BACKUP or PRODUCTION")
 
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'system.serverMode\s*=.*', 'system.serverMode=' + environment)
-      self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'alfresco.authentification.allowGuestLogin\s*=.*', 'alfresco.authentification.allowGuestLogin=false')
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'system.serverMode\s*=.*', 'system.serverMode=' + environment)
+      self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'alfresco.authentification.allowGuestLogin\s*=.*', 'alfresco.authentification.allowGuestLogin=false')
 
 
 
@@ -124,41 +127,41 @@ class ServiceRun():
               raise KeyError("You must provide protocol")
           if mail_sender is None or mail_sender =="":
               raise KeyError("You must provide the mail sender")
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.host\s*=.*', 'mail.host=' + host)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.port\s*=.*', 'mail.port=' + port)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.protocol\s*=.*', 'mail.protocol=' + protocol)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.from.default\s*=.*', 'mail.from.default=' + mail_sender)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.host\s*=.*', 'mail.host=' + host)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.port\s*=.*', 'mail.port=' + port)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.protocol\s*=.*', 'mail.protocol=' + protocol)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.from.default\s*=.*', 'mail.from.default=' + mail_sender)
       else:
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.host\s*=', '#mail.host=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.port\s*=', '#mail.port=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.protocol\s*=', '#mail.protocol=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.from.default\s*=', 'mail.from.default=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.host\s*=', '#mail.host=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.port\s*=', '#mail.port=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.protocol\s*=', '#mail.protocol=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.from.default\s*=', 'mail.from.default=')
 
       if user is not None and user != "":
           if password is None or password == "":
               raise KeyError("You must provide password")
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.username\s*=.*', 'mail.username=' + user)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.password\s*=.*', 'mail.password=' + password)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.username\s*=.*', 'mail.username=' + user)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.password\s*=.*', 'mail.password=' + password)
 
           if protocol == "smtp":
-              self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtp.auth\s*=.*', 'mail.smtp.auth=true')
+              self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtp.auth\s*=.*', 'mail.smtp.auth=true')
               if starttls_enable == "true":
-                  self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtp.starttls.enable\s*=.*', 'mail.smtp.starttls.enable=true')
+                  self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtp.starttls.enable\s*=.*', 'mail.smtp.starttls.enable=true')
               else:
-                  self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtp.starttls.enable\s*=', '#mail.smtp.starttls.enable=')
+                  self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtp.starttls.enable\s*=', '#mail.smtp.starttls.enable=')
           elif protocol == "smtps":
-              self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtps.auth\s*=.*', 'mail.smtps.auth=true')
+              self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtps.auth\s*=.*', 'mail.smtps.auth=true')
               if starttls_enable == "true":
-                  self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtps.starttls.enable\s*=.*', 'mail.smtps.starttls.enable=true')
+                  self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtps.starttls.enable\s*=.*', 'mail.smtps.starttls.enable=true')
               else:
-                  self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtps.starttls.enable\s*=', '#mail.smtps.starttls.enable=')
+                  self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtps.starttls.enable\s*=', '#mail.smtps.starttls.enable=')
       else:
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.username\s*=', '#mail.username=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.password\s*=', '#mail.password=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtp.auth\s*=', '#mail.smtp.auth=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtps.auth\s*=', '#mail.smtps.auth=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtp.starttls.enable\s*=', '#mail.smtp.starttls.enable=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.mail.smtps.starttls.enable\s*=', '#mail.smtps.starttls.enable=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.username\s*=', '#mail.username=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.password\s*=', '#mail.password=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtp.auth\s*=', '#mail.smtp.auth=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtps.auth\s*=', '#mail.smtps.auth=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtp.starttls.enable\s*=', '#mail.smtp.starttls.enable=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.mail.smtps.starttls.enable\s*=', '#mail.smtps.starttls.enable=')
 
 
 
@@ -171,21 +174,21 @@ class ServiceRun():
           if domain is None or domain == "":
               raise KeyError("You must provide the domain")
 
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.enabled\s*=.*', 'cifs.enabled=true')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.Server.Name\s*=.*', 'cifs.Server.Name=' + server_name)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.domain\s*=.*', 'cifs.domain=' + domain)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.hostannounce\s*=.*', 'cifs.hostannounce=true')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.broadcast\s*=.*', 'cifs.broadcast=0.0.0.255')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.ipv6.enabled\s*=.*', 'cifs.ipv6.enabled=false')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.enabled\s*=.*', 'cifs.enabled=true')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.Server.Name\s*=.*', 'cifs.Server.Name=' + server_name)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.domain\s*=.*', 'cifs.domain=' + domain)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.hostannounce\s*=.*', 'cifs.hostannounce=true')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.broadcast\s*=.*', 'cifs.broadcast=0.0.0.255')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.ipv6.enabled\s*=.*', 'cifs.ipv6.enabled=false')
       else:
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.enabled\s*=', '#cifs.enabled=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.Server.Name\s*=', '#cifs.Server.Name=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.domain\s*=', '#cifs.domain=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.hostannounce\s*=', '#cifs.hostannounce=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.broadcast\s*=', '#cifs.broadcast=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.cifs.ipv6.enabled\s*=', '#cifs.ipv6.enabled=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.enabled\s*=', '#cifs.enabled=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.Server.Name\s*=', '#cifs.Server.Name=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.domain\s*=', '#cifs.domain=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.hostannounce\s*=', '#cifs.hostannounce=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.broadcast\s*=', '#cifs.broadcast=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.ipv6.enabled\s*=', '#cifs.ipv6.enabled=')
 
-  def set_ldap(self, enable, auth_format, host, user, password, list_admins, search_base_group, search_base_user):
+  def set_ldap(self, enable, auth_format, host, user, password, list_admins, search_base_group, search_base_user, sync, timeformat):
       global ALFRESCO_PATH
 
       if enable == "true":
@@ -203,17 +206,23 @@ class ServiceRun():
               raise KeyError("You must provide the search base group")
           if search_base_user is None or search_base_user == "":
               raise KeyError("You must provide the search base user")
+          if sync is None or sync == "":
+              raise KeyError("You must provide sync")
 
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'authentication.chain\s*=.*', 'authentication.chain=alfrescoNtlm1:alfrescoNtlm,ldap1:ldap')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.authentication.userNameFormat\s*=.*', 'ldap.authentication.userNameFormat=' + auth_format)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.authentication.java.naming.provider.url\s*=.*', 'ldap.authentication.java.naming.provider.url=ldap://' + host + ':389')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.authentication.defaultAdministratorUserNames\s*=.*', 'ldap.authentication.defaultAdministratorUserNames=' + list_admins)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.synchronization.java.naming.security.principal\s*=.*', 'ldap.synchronization.java.naming.security.principal=' + user)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.synchronization.java.naming.security.credentials\s*=.*', 'ldap.synchronization.java.naming.security.credentials=' + password)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.synchronization.groupSearchBase\s*=.*', 'ldap.synchronization.groupSearchBase=' + search_base_group)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties', 'ldap.synchronization.userSearchBase\s*=.*', 'ldap.synchronization.userSearchBase=' + search_base_user)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'authentication.chain\s*=.*', 'authentication.chain=alfrescoNtlm1:alfrescoNtlm,ldap1:ldap')
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.authentication.userNameFormat\s*=.*', 'ldap.authentication.userNameFormat=' + auth_format)
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.authentication.java.naming.provider.url\s*=.*', 'ldap.authentication.java.naming.provider.url=ldap://' + host + ':389')
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.authentication.defaultAdministratorUserNames\s*=.*', 'ldap.authentication.defaultAdministratorUserNames=' + list_admins)
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.synchronization.java.naming.security.principal\s*=.*', 'ldap.synchronization.java.naming.security.principal=' + user)
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.synchronization.java.naming.security.credentials\s*=.*', 'ldap.synchronization.java.naming.security.credentials=' + password)
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.synchronization.groupSearchBase\s*=.*', 'ldap.synchronization.groupSearchBase=' + search_base_group)
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.synchronization.userSearchBase\s*=.*', 'ldap.synchronization.userSearchBase=' + search_base_user)
+          self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.synchronization.active\s*=.*', 'ldap.synchronization.active=' + sync)
+          if timeformat is not None and timeformat != "":
+              self.replace_all(ALFRESCO_PATH + LDAP_PROP, 'ldap.synchronization.timestampFormat\s*=.*', 'ldap.synchronization.timestampFormat=' + timeformat)
+
       else:
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', 'authentication.chain\s*=.*', 'authentication.chain=alfrescoNtlm1:alfrescoNtlm')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, 'authentication.chain\s*=.*', 'authentication.chain=alfrescoNtlm1:alfrescoNtlm')
 
   def init_data_folder(self):
       global ALFRESCO_PATH
@@ -386,14 +395,14 @@ class ServiceRun():
   def set_vti_setting(self, host, port):
 
       if host is not None and host != "" and port is not None and port > 0:
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.vti.server.port\s*=.*', 'vti.server.port=7070')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.vti.server.external.host\s*=.*', 'vti.server.external.host=' + host)
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.vti.server.external.port\s*=.*', 'vti.server.external.port=' + port)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.port\s*=.*', 'vti.server.port=7070')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.external.host\s*=.*', 'vti.server.external.host=' + host)
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.external.port\s*=.*', 'vti.server.external.port=' + port)
 
       else:
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.vti.server.port\s*=.*', '#vti.server.port=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.vti.server.external.host\s*=.*', '#vti.server.external.host=')
-          self.replace_all(ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties', '^#.vti.server.external.port\s*=.*', '#vti.server.external.port=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.port\s*=.*', '#vti.server.port=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.external.host\s*=.*', '#vti.server.external.host=')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.external.port\s*=.*', '#vti.server.external.port=')
 
 
   def disable_log_rotation(self):
@@ -465,7 +474,7 @@ if __name__ == '__main__':
     serviceRun = ServiceRun()
 
     # We init alfresco config
-    os.system('cp ' + ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties.org ' + ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties')
+    os.system('cp ' + ALFRESCO_PATH + '/tomcat/shared/classes/alfresco-global.properties.org ' + ALFRESCO_PATH + GLOBAL_PROP)
 
     # We init share-config
     os.system('cp ' + ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml.org ' + ALFRESCO_PATH + '/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml')
@@ -508,7 +517,7 @@ if __name__ == '__main__':
     serviceRun.set_cifs(os.getenv('CIFS_ENABLED', 'true'), os.getenv('CIFS_SERVER_NAME', 'localhost'), os.getenv('CIFS_DOMAIN', 'WORKGROUP'))
 
     # We set LDAP
-    serviceRun.set_ldap(os.getenv('LDAP_ENABLED', 'false'), os.getenv('LDAP_AUTH_FORMAT'), os.getenv('LDAP_HOST'), os.getenv('LDAP_USER'), os.getenv('LDAP_PASSWORD'), os.getenv('LDAP_ADMINS'), os.getenv('LDAP_GROUP_SEARCHBASE'), os.getenv('LDAP_USER_SEARCHBASE'))
+    serviceRun.set_ldap(os.getenv('LDAP_ENABLED', 'false'), os.getenv('LDAP_AUTH_FORMAT'), os.getenv('LDAP_HOST'), os.getenv('LDAP_USER'), os.getenv('LDAP_PASSWORD'), os.getenv('LDAP_ADMINS'), os.getenv('LDAP_GROUP_SEARCHBASE'), os.getenv('LDAP_USER_SEARCHBASE'), os.getenv('LDAP_SYNC', 'false'), os.getenv('LDAP_TIMEFORMAT'))
 
     # Reverse Proxy
     if os.getenv('REVERSE_PROXY_URL') is not None:
