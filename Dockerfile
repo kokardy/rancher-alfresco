@@ -38,7 +38,11 @@ COPY assets/setup/supervisord-postgresql.conf /etc/supervisor/conf.d/
 # CLEAN APT
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-VOLUME ["${ALF_HOME}/alf_data"]
+ENV GLOBAL_PROP ${ALF_HOME}/tomcat/shared/classes/alfresco-global.properties
+
+ENV LDAP_PROP ${ALF_HOME}/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties
+
+VOLUME ["${ALF_HOME}/alf_data", GLOBAL_PROP, LDAP_PROP]
 
 EXPOSE 21 137 138 139 445 7070 8009 8080
 

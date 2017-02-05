@@ -11,12 +11,15 @@ __author__ = 'Sebastien LANGOUREAUX'
 ALFRESCO_PATH = '/opt/alfresco'
 GLOBAL_PROP = '/tomcat/shared/classes/alfresco-global.properties'
 LDAP_PROP = '/tomcat/shared/classes/alfresco/extension/subsystems/Authentication/ldap/ldap1/ldap-authentication.properties'
+POSTGRES_CONF = '/etc/supervisor/conf.d/supervisord-postgresql.conf'
 
 
 class ServiceRun():
 
   def set_database_connection(self, db_type, db_host, db_port, db_name, db_user, db_password):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
+      global POSTGRES_CONF
 
       if db_type not in ["postgresql", "mysql"]:
           raise KeyError("DB type must be Postgresql or Mysql")
@@ -25,11 +28,11 @@ class ServiceRun():
           raise KeyError("For local database, you must use Postgresql")
 
       if db_host != "localhost" and db_host != "127.0.0.1":
-          self.replace_all('/etc/supervisor/conf.d/supervisord-postgresql.conf', 'autostart\s*=.*', 'autostart=false')
-          self.replace_all('/etc/supervisor/conf.d/supervisord-postgresql.conf', 'autorestart\s*=.*', 'autorestart=false')
+          self.replace_all(POSTGRES_CONF, 'autostart\s*=.*', 'autostart=false')
+          self.replace_all(POSTGRES_CONF, 'autorestart\s*=.*', 'autorestart=false')
       else:
-          self.replace_all('/etc/supervisor/conf.d/supervisord-postgresql.conf', 'autostart\s*=.*', 'autostart=true')
-          self.replace_all('/etc/supervisor/conf.d/supervisord-postgresql.conf', 'autorestart\s*=.*', 'autorestart=true')
+          self.replace_all(POSTGRES_CONF, 'autostart\s*=.*', 'autostart=true')
+          self.replace_all(POSTGRES_CONF, 'autorestart\s*=.*', 'autorestart=true')
 
       if db_host is None or db_host == "":
           raise KeyError("You must provide db_host")
@@ -62,6 +65,7 @@ class ServiceRun():
 
   def set_alfresco_context(self, host, port, protocol):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
 
       if host is None or host == "":
           raise KeyError("You must provide host")
@@ -80,6 +84,7 @@ class ServiceRun():
 
   def set_share_context(self, host, port, protocol):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
 
       if host is None or host == "":
           raise KeyError("You must provide host")
@@ -96,6 +101,7 @@ class ServiceRun():
 
   def set_ftp(self, enable, port):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
 
       if port is None or port == "":
           raise KeyError("You must provide port")
@@ -108,6 +114,7 @@ class ServiceRun():
 
   def set_core(self, environment):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
 
       if environment not in ["UNKNOWN", "TEST", "BACKUP", "PRODUCTION"]:
           raise KeyError("Environment must be UNKNOWN, TEST, BACKUP or PRODUCTION")
@@ -119,6 +126,7 @@ class ServiceRun():
 
   def set_mail(self, host, port, user, password, protocol, starttls_enable, mail_sender):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
 
       if host is not None and host != "":
           if port is None or port == "":
@@ -167,6 +175,7 @@ class ServiceRun():
 
   def set_cifs(self, enable, server_name, domain):
       global ALFRESCO_PATH
+      global GLOBAL_PROP
 
       if enable == "true":
           if server_name is None or server_name == "":
@@ -190,6 +199,8 @@ class ServiceRun():
 
   def set_ldap(self, enable, auth_format, host, user, password, list_admins, search_base_group, search_base_user, sync, timeformat):
       global ALFRESCO_PATH
+      global LDAP_PROP
+      global GLOBAL_PROP
 
       if enable == "true":
           if auth_format is None or auth_format == "":
@@ -393,6 +404,9 @@ class ServiceRun():
 
 
   def set_vti_setting(self, host, port):
+      global ALFRESCO_PATH
+      global GLOBAL_PROP
+
 
       if host is not None and host != "" and port is not None and port > 0:
           self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.vti.server.port\s*=.*', 'vti.server.port=7070')
@@ -406,6 +420,7 @@ class ServiceRun():
 
 
   def disable_log_rotation(self):
+      global ALFRESCO_PATH
 
       valve_setting = 'prefix="localhost_access_log" suffix=".log" pattern="combined" rotatable="false"'
       self.replace_all(ALFRESCO_PATH + '/tomcat/conf/server.xml', 'prefix="localhost_access_log" suffix=".txt"', valve_setting)
