@@ -7,6 +7,7 @@ python /app/init.py
 #LIBRE OFFICE SETTING
 cd /opt/alfresco/libreoffice/scripts
 ln -s libreoffice_ctl.sh ctl.sh
+chown alfresco:alfresco ctl.sh
 sed -i -e "s/\\\\;/;/g" libreoffice_ctl.sh
 ####################################
 
