@@ -226,6 +226,9 @@ using environment variables.
 - **CIFS_ENABLED**: whether or not to enable CIFS; default = `true`
 - **CIFS_SERVER_NAME**: hostname of the CIFS server; default = `localhost`
 - **CIFS_DOMAIN**: domain of the CIFS server; default = `WORKGROUP`
+- **CIFS_PORT**: port of the CIFS server; default = `445`
+- **CIFS_BROADCAST**: broadcast of the CIFS server; default = `0.0.0.255`
+
 - **DATABASE_HOST**: host of the database server; default = `localhost`
 - **DATABASE_TYPE**: postgresql or mysql; default = `postgresql`
 - **DATABASE_NAME**: name of the database to connect to; default = `alfresco`
