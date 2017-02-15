@@ -173,7 +173,7 @@ class ServiceRun():
 
 
 
-  def set_cifs(self, enable, server_name, domain, port):
+  def set_cifs(self, enable, server_name, domain, port, broadcast):
       global ALFRESCO_PATH
       global GLOBAL_PROP
 
@@ -187,7 +187,7 @@ class ServiceRun():
           self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.Server.Name\s*=.*', 'cifs.Server.Name=' + server_name)
           self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.domain\s*=.*', 'cifs.domain=' + domain)
           self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.hostannounce\s*=.*', 'cifs.hostannounce=true')
-          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.broadcast\s*=.*', 'cifs.broadcast=0.0.0.255')
+          self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.broadcast\s*=.*', 'cifs.broadcast=' + broadcast)
           self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.ipv6.enabled\s*=.*', 'cifs.ipv6.enabled=false')
           self.replace_all(ALFRESCO_PATH + GLOBAL_PROP, '^#.cifs.tcpipSMB.port\s*=.*', 'cifs.tcpipSMB.port='+ port)
       else:
@@ -530,7 +530,7 @@ if __name__ == '__main__':
     serviceRun.set_mail(os.getenv('MAIL_HOST', 'localhost'), os.getenv('MAIL_PORT', '25'), os.getenv('MAIL_USER'), os.getenv('MAIL_PASSWORD'), os.getenv('MAIL_PROTOCOL', 'smtp'), os.getenv('MAIL_STARTTLS_ENABLE', 'false'), os.getenv('MAIL_SENDER', 'alfresco@alfresco.org'))
 
     # We set CIFS
-    serviceRun.set_cifs(os.getenv('CIFS_ENABLED', 'true'), os.getenv('CIFS_SERVER_NAME', 'localhost'), os.getenv('CIFS_DOMAIN', 'WORKGROUP'), os.getenv('CIFS_PORT', '445'))
+    serviceRun.set_cifs(os.getenv('CIFS_ENABLED', 'true'), os.getenv('CIFS_SERVER_NAME', 'localhost'), os.getenv('CIFS_DOMAIN', 'WORKGROUP'), os.getenv('CIFS_PORT', '445'), os.getenv('CIFS_BROADCAST', '0.0.0.255')
 
     # We set LDAP
     serviceRun.set_ldap(os.getenv('LDAP_ENABLED', 'false'), os.getenv('LDAP_AUTH_FORMAT'), os.getenv('LDAP_HOST'), os.getenv('LDAP_USER'), os.getenv('LDAP_PASSWORD'), os.getenv('LDAP_ADMINS'), os.getenv('LDAP_GROUP_SEARCHBASE'), os.getenv('LDAP_USER_SEARCHBASE'), os.getenv('LDAP_SYNC', 'false'), os.getenv('LDAP_TIMEFORMAT'))
